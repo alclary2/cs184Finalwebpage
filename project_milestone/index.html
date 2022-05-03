@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Final Project Milestone</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2022</h1>
+<h1 align="middle">Final Project Milestone</h1>
+<h2 align="middle">Title: Realistic Cloth Rendering For Project 4</h2>
+
+<h2 align="middle">Team Members: Anna Clary, Ava Patel, Lucy Lou, Iman Kahssay</h2>
+
+<h2 align="middle">Struggles in Landing On Our Topic:</h2>
+<p>Our team faced many struggles on settling on a final project topic. Our initial proposal was forking 
+    and adding onto a NonEuclidean rendering engine. Unfortunately, it was written for Windows, and 3/4 of 
+    the team has MacBooks. We spent 2-3 days trying to configure the base code in order for it to work, 
+    but ended up deciding that the process was too time-consuming. We then changed our project idea to 
+    realistically render textiles. To do so we determined we needed a ray-tracing program and landed on 
+    Mitsuba. Unfortunately again, half the team wasn’t able to compile the program. We spent another day 
+    screen-sharing to try and figure out why it wouldn’t build.Unable to find a solution we decided to 
+    add onto an existing project. Knowing we needed a ray tracing program to implement a cloth BRDF we 
+    decided to try and use project 3-2. We went to office hours to talk to the staff about implementation 
+    and were told to trace the stack/compiler to figure out where in the code the specific BSDF functions 
+    were called. We traced the stack and it always went into assembly language. So, unfortunately we were 
+    not able to use the article to build on project 3-2 as hoped .Finally, Iman Kahssay found another 
+    article, https://google.github.io/filament/Filament.html#materialsystem/clothmodel, that described 
+    how cloth materials can be rendered using a shader program (like we did in Project 4). We then decided 
+    to build on Project 4 via implementing a new local shading model that was tailored towards lighting for 
+    cloth textures.
+</p>
+<p>In addition to the technical struggles, Lucy’s computer couldn’t turn on for 2 days and Iman contracted 
+    a bacterial infection in her throat (i.e. strep throat). All 4 of us also had many other projects due 
+    and other extracurriculars around the same time.
+</p>
+
+
+<h2 align="middle">What We Have Accomplished So Far...</h2>
+<p>For our final project, we chose the concept of “Cloth Rendering” (with a difficulty level of 2.0), where 
+    we will create a shading model that is fit for cloth materials, making them look more realistic (and 
+    detailed) to the human eye. In the shading program, we will implement a local shading model (which is 
+    based on perceptual observation, not physics) that focuses specifically on textiles. Similarly to 
+    Blinn-Phong model, our shader utilizes the diffusion lighting, specular lighting, and ambient lighting 
+    of an object. Additionally sheen color will be introduced in order to render two tone materials.
+</p>
+<p>In our code/implementation, we included the bump mapping - we modified the normal vectors of an object 
+    - so that the fragment shader gives the illusion of detail (or texture) on the cloth. Once we added 
+    the bump mapping into our implementation, we implemented the cloth diffusion BRDF formula (𝑓𝑑(𝑣,ℎ) = 
+    𝑐𝑑𝑖𝑓𝑓 /𝜋) given to us in our research paper. We then chose to encode the “Charlie” sheen NDF (Normal 
+    Distribution Function) into our specular lighting formula, and added the diffusion and specular 
+    components to compose the local shading model for our cloth. 
+    Next, we implemented the diffusion component, 𝑓𝑑(𝑣,ℎ) = (𝑐𝑑𝑖𝑓𝑓 / 𝜋) (1 − 𝐹(𝑣,ℎ)), given in our 
+    cloth model research paper. We noticed that using this formula, our cloth looked lighter in color. 
+    In the future, we will compare and contrast this formula with the Lambertian diffuse shading formula 
+    and see which is better for our cloth shader.
+    So far, the implementations we made have shown great results. There is, however, one bug that we 
+    have not yet been able to correct. When the cloth is rendered, there are shimmering light pockets 
+    in areas that are supposed to be dark, at the bottom of the sphere and cloth. We suspect the bug 
+    is in the specular lighting component of our code, but have not been able to locate and fix the 
+    issue yet.
+</p>
+
+<h2 align="middle">Preliminary Results</h2>
+<p>Before we implemented any code for our final project, we had the starter code from “Bump.frag” from 
+    Project 4, where it shows the texture/detail of a cloth and uses the Blinn-Phong model. As you can see, 
+    the cloth looks more plastic and unrealistic. After implementing our code, the cloth’s texture looks 
+    more pronounced and detailed.  Also, the lighting implementation we used makes the cloth look more 
+    realistic (and less like plastic). We did, however, notice that there is a bug in our specular 
+    lighting, where there are shimmering light pockets in areas that are supposed to be dark, and at 
+    the bottom of the sphere and cloth. We suspect the bug is in the specular lighting component of our 
+    code, but have not been able to locate and fix the issue yet.
+</p>
+
+	<div align="middle">
+		<table style="width=100%">
+		<tr>
+			<td>
+				<img src="images/bumpClothTexture.gif" align="middle" width="400px" />
+				<figcaption align="middle">just project 4 code, very plastic looking</figcaption>
+			</td>
+			<td>
+				<img src="images/customClothTexture.gif" align="middle" width="400px" />
+				<figcaption align="middle">current results</figcaption>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<img src="images/customBugTexture.gif" align="middle" width="400px" />
+				<figcaption align="middle">focus on our current bug</figcaption>
+			</td>
+		</tr>
+		</table>
+	</div>
+
+<h2 align="middle">Future Plan:</h2>
+<ul>
+    <li>fix the specular lighting bug by May 3rd</li>
+    <li>add anisotropic lighting component to our coth shader by May 4th</li>
+    <li>add and render more textures (such as velvet, silk, cotton, etc.) by May 5th</li>
+    <li>if we have extra time we will try and implment subsurface coloring as well</li>
+</ul>
+<p>By May 5th, everything should be in order so that we are ready to show our project for the 
+    Final Presentation.
+</p>
+
+<h2 align="middle">Video:</h2>
+
+<h2 align="middle">Slides:</h2>
+<p>https://docs.google.com/presentation/d/1KCHW6IpdHodwBsDuWQ8HQefEQmJoVueeyesg7kTC36c/edit?usp=sharing</p>
+
+</body>
+</html>
