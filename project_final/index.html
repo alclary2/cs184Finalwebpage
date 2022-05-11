@@ -57,67 +57,97 @@
 
 <h3>Sphere’s Rendered Using our Anisotropic Model Varying Only Roughness as a Parameter:</h3>
 
+<img src="images/roughnessscale.png" align="middle" width="1000"/>
+
+<p>Anisotropic Model:</p>
+<p>The anisotropic model introduces one more parameter than the cloth model.</p>
+<dl>
+    <dt><strong>Anisotropy</strong></dt>
+    <dd>- This is a manual user inputed float between -1.0 and 1.0</dd>
+    <dd>- negative values produce specular components that are vertical aka bi-tangental to the surface normals, these types of values were not used in any of our renderings as the result of the vertical specular components did not create a realistic looking model for our purposes</dd>
+    <dd>- As you can see below, increasing the anisotropic variable results in more defined ring-like highlights</dd>
+</dl>
+
+<h3>Sphere’s Rendered Using our Anisotropic Model Varying Only Anisotropy as a Parameter:</h3>
+
+<img src="images/anisotropyscale.png" align="middle" width="1000"/>
+
+<p>Similarly to our Cloth model our Anisotropic lighting model hinges on three main aspects, our distribution function, visibility component and diffuse component. All of which we utilized our source material to properly define and code.</p>
+
+<p>Distribution</p>
+<img src="images/distributioneq.png"/>
+
+<p>This was our chosen distribution function, with h being the half angel and 𝜶 being our roughness parameter as defined before our cloth shader explanation. One of the key new factors in this distribution are the alpha-t and alpha-b variables. We calculated these variables according to the equations below:</p>
+<img src="images/anisotropyeq.png"/>
+
+<p>In our documentation there were a few options in terms of how one could calculate the alpha-t and alpha-b values. Ultimately we chose this implementation for two key reasons: simplicity and results. Using the above definitions we were able to render very nice distinct anisotropic specular components without having to complete a plethora of operations. As our code is being done in a shader file it is vital to make sure it is as simplistic as possible in order to prevent performance issues.</p>
+
+<p>Visibility</p>
+<img src="images/visibilityeq.png"/>
+
+<p>This is our visibility parameter as outlined in our documentation. With the lambda-v and lambda-t defined as:</p>
+<img src="images/visibilityeq2.png"/>
+
+<p>The visibility, distribution and sheen color are multiplied together to create our specular component and then added to our diffuse, which utilizes the same code as our diffuse component in the cloth shader. Below is a visual of our diffuse + specular component that produces our final result. As you can see the sheen color plays a really interesting role in rendering the realistic looking fuschia silk.</p>
+<img src="images/anisoadd.png" align="middle" width="1000"/>
+
+<h2 align="middle">Results</h2>
+
 <div align="middle">
     <table style="width=100%">
     <tr>
         <td>
-            <img src="images/bumpClothTexture.gif" align="middle" width="400px" />
-            <figcaption align="middle">0.1</figcaption>
+            <img src="images/before_close_up.png" align="middle" width="400px" />
+            <figcaption align="middle">Code from Project 4. Very plastic looking</figcaption>
         </td>
         <td>
-            <img src="images/customClothTexture.gif" align="middle" width="400px" />
-            <figcaption align="middle">0.5</figcaption>
+            <img src="images/wool_knit_closeup.png" align="middle" width="400px" />
+            <figcaption align="middle">Close up of wool-knit</figcaption>
         </td>
-    </tr>
-    <tr>
         <td>
-            <img src="images/customBugTexture.gif" align="middle" width="400px" />
-            <figcaption align="middle">0.9</figcaption>
+            <img src="images/silk_close_up.png" align="middle" width="400px" />
+            <figcaption align="middle">Close up of silk cloth</figcaption>
         </td>
     </tr>
     </table>
 </div>
 
+<h2 align="middle">Gallery</h2>
 
-<h2 align="middle">Preliminary Results</h2>
+<div align="middle">
+    <table style="width=100%">
+    <tr>
+        <td>
+            <img src="images/clothd&s.png" align="middle" width="400px" />
+        </td>
+        <td>
+            <img src="images/image21.png" align="middle" width="400px" />
+        </td>
+        <td>
+            <img src="images/image22.png" align="middle" width="400px" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="images/image23.png" align="middle" width="400px" />
+        </td>
+        <td>
+            <img src="images/image24.png" align="middle" width="400px" />
+        </td>
+        <td>
+            <img src="images/silk_dress.png" align="middle" width="400px" />
+        </td>
+    </tr>
+    </table>
+</div>
 
-	<div align="middle">
-		<table style="width=100%">
-		<tr>
-			<td>
-				<img src="images/bumpClothTexture.gif" align="middle" width="400px" />
-				<figcaption align="middle">Code from Project 4. Very plastic looking</figcaption>
-			</td>
-			<td>
-				<img src="images/customClothTexture.gif" align="middle" width="400px" />
-				<figcaption align="middle">Current Results</figcaption>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<img src="images/customBugTexture.gif" align="middle" width="400px" />
-				<figcaption align="middle">Focus on our current bug</figcaption>
-			</td>
-		</tr>
-		</table>
-	</div>
+<h2 align="middle">References</h2>
 
-<h2 align="middle">Future Plan:</h2>
-<ul>
-    <li>Fix the specular lighting bug by <strong>May 3rd</strong></li>
-    <li>Add anisotropic lighting component to our cloth shader by <strong>May 4th</strong></li>
-    <li>Add and render more textures (such as velvet, silk, cotton, etc.) by <strong>May 5th</strong></li>
-    <li>If we have extra time we will try and implment subsurface coloring as well</li>
-</ul>
-<p><strong>By May 5th</strong>, everything should be in order so that we are ready to show our project for the 
-    Final Presentation.
-</p>
+<a href="https://google.github.io/filament/Filament.html#materialsystem/clothmodel ">https://google.github.io/filament/Filament.html#materialsystem/clothmodel</a>
+<a href="https://google.github.io/filament/Filament.html#materialsystem/anisotropicmodel ">https://google.github.io/filament/Filament.html#materialsystem/anisotropicmodel</a>
 
 <h2 align="middle">Video:</h2>
-<a href="https://drive.google.com/file/d/1jd0BjxhEa05bSvKewSQE4yz5nZp-4VMV/view?usp=sharing"> Milestone Video </a>
-
-<h2 align="middle">Slides:</h2>
-<a href="https://docs.google.com/presentation/d/1KCHW6IpdHodwBsDuWQ8HQefEQmJoVueeyesg7kTC36c/edit?usp=sharing"> Milestone Slides </a>
+<a href="placeholder"> Final Video </a>
 
 </body>
 </html>
